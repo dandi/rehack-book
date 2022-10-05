@@ -503,73 +503,6 @@ title="Print to PDF"
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">sweep_table</span> <span class="o">=</span> <span class="n">load_sweep_table</span><span class="p">(</span><span class="n">s3_url</span><span class="p">)</span>
-
-<span class="nn">Cell In [6], line 3,</span> in <span class="ni">load_sweep_table</span><span class="nt">(s3_url)</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">def</span> <span class="nf">load_sweep_table</span><span class="p">(</span><span class="n">s3_url</span><span class="p">):</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="sd">&#39;&#39;&#39;Creates a dataframe of the stimulus presentation table&#39;&#39;&#39;</span>
-<span class="ne">----&gt; </span><span class="mi">3</span>     <span class="k">with</span> <span class="n">pynwb</span><span class="o">.</span><span class="n">NWBHDF5IO</span><span class="p">(</span><span class="n">s3_url</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">load_namespaces</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s1">&#39;ros3&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">io</span><span class="p">:</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>         <span class="n">nwbfile</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>         <span class="n">start_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nwbfile</span><span class="o">.</span><span class="n">intervals</span><span class="p">[</span><span class="s1">&#39;epochs&#39;</span><span class="p">][</span><span class="s1">&#39;start_time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.14/x64/lib/python3.9/site-packages/hdmf/utils.py:645,</span> in <span class="ni">docval.&lt;locals&gt;.dec.&lt;locals&gt;.func_call</span><span class="nt">(*args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">643</span> <span class="k">def</span> <span class="nf">func_call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">644</span>     <span class="n">pargs</span> <span class="o">=</span> <span class="n">_check_args</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">645</span>     <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">**</span><span class="n">pargs</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.14/x64/lib/python3.9/site-packages/pynwb/__init__.py:230,</span> in <span class="ni">NWBHDF5IO.__init__</span><span class="nt">(self, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">227</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;cannot load namespaces from file when writing to it&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">229</span>     <span class="n">tm</span> <span class="o">=</span> <span class="n">get_type_map</span><span class="p">()</span>
-<span class="ne">--&gt; </span><span class="mi">230</span>     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">load_namespaces</span><span class="p">(</span><span class="n">tm</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">file_obj</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">231</span>     <span class="n">manager</span> <span class="o">=</span> <span class="n">BuildManager</span><span class="p">(</span><span class="n">tm</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">233</span>     <span class="c1"># XXX: Leaving this here in case we want to revert to this strategy for</span>
-<span class="g g-Whitespace">    </span><span class="mi">234</span>     <span class="c1">#      loading cached namespaces</span>
-<span class="g g-Whitespace">    </span><span class="mi">235</span>     <span class="c1"># ns_catalog = NamespaceCatalog(NWBGroupSpec, NWBDatasetSpec, NWBNamespace)</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">238</span>     <span class="c1"># tm.copy_mappers(get_type_map())</span>
-<span class="g g-Whitespace">    </span><span class="mi">239</span> <span class="k">else</span><span class="p">:</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.14/x64/lib/python3.9/site-packages/hdmf/utils.py:645,</span> in <span class="ni">docval.&lt;locals&gt;.dec.&lt;locals&gt;.func_call</span><span class="nt">(*args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">643</span> <span class="k">def</span> <span class="nf">func_call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">644</span>     <span class="n">pargs</span> <span class="o">=</span> <span class="n">_check_args</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">645</span>     <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">**</span><span class="n">pargs</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.14/x64/lib/python3.9/site-packages/hdmf/backends/hdf5/h5tools.py:150,</span> in <span class="ni">HDF5IO.load_namespaces</span><span class="nt">(cls, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">139</span> <span class="sd">&quot;&quot;&quot;Load cached namespaces from a file.</span>
-<span class="g g-Whitespace">    </span><span class="mi">140</span><span class="sd"> </span>
-<span class="g g-Whitespace">    </span><span class="mi">141</span><span class="sd"> If `file` is not supplied, then an :py:class:`h5py.File` object will be opened for the given `path`, the</span>
-<span class="sd">   (...)</span>
-<span class="g g-Whitespace">    </span><span class="mi">145</span><span class="sd"> :raises ValueError: if both `path` and `file` are supplied but `path` is not the same as the path of `file`.</span>
-<span class="g g-Whitespace">    </span><span class="mi">146</span><span class="sd"> &quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">147</span> <span class="n">namespace_catalog</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">namespaces</span><span class="p">,</span> <span class="n">file_obj</span><span class="p">,</span> <span class="n">driver</span> <span class="o">=</span> <span class="n">popargs</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">148</span>     <span class="s1">&#39;namespace_catalog&#39;</span><span class="p">,</span> <span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="s1">&#39;namespaces&#39;</span><span class="p">,</span> <span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="s1">&#39;driver&#39;</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">150</span> <span class="n">open_file_obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__resolve_file_obj</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">file_obj</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">151</span> <span class="k">if</span> <span class="n">file_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># need to close the file object that we just opened</span>
-<span class="g g-Whitespace">    </span><span class="mi">152</span>     <span class="k">with</span> <span class="n">open_file_obj</span><span class="p">:</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.14/x64/lib/python3.9/site-packages/hdmf/backends/hdf5/h5tools.py:125,</span> in <span class="ni">HDF5IO.__resolve_file_obj</span><span class="nt">(path, file_obj, driver)</span>
-<span class="g g-Whitespace">    </span><span class="mi">123</span>     <span class="k">if</span> <span class="n">driver</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">124</span>         <span class="n">file_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">125</span>     <span class="n">file_obj</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">file_kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">126</span> <span class="k">return</span> <span class="n">file_obj</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.14/x64/lib/python3.9/site-packages/h5py/_hl/files.py:485,</span> in <span class="ni">File.__init__</span><span class="nt">(self, name, mode, driver, libver, userblock_size, swmr, rdcc_nslots, rdcc_nbytes, rdcc_w0, track_order, fs_strategy, fs_persist, fs_threshold, fs_page_size, page_buf_size, min_meta_keep, min_raw_keep, locking, alignment_threshold, alignment_interval, **kwds)</span>
-<span class="g g-Whitespace">    </span><span class="mi">482</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The SWMR feature is not available in this version of the HDF5 library&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">484</span> <span class="k">if</span> <span class="n">driver</span> <span class="o">==</span> <span class="s1">&#39;ros3&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ros3</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">485</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">486</span>         <span class="s2">&quot;h5py was built without ROS3 support, can&#39;t use ros3 driver&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">488</span> <span class="k">if</span> <span class="n">locking</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">hdf5_version</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">489</span>         <span class="n">hdf5_version</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="ow">or</span> <span class="n">hdf5_version</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">7</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">490</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;HDF version &gt;= 1.12.1 or 1.10.x &gt;= 1.10.7 required for file locking options.&quot;</span><span class="p">)</span>
-
-<span class="ne">ValueError</span>: h5py was built without ROS3 support, can&#39;t use ros3 driver
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -577,6 +510,82 @@ title="Print to PDF"
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Start</th>
+      <th>End</th>
+      <th>Contrast</th>
+      <th>Ori</th>
+      <th>SF</th>
+      <th>TF</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>194.0</td>
+      <td>254.0</td>
+      <td>0.05</td>
+      <td>270.0</td>
+      <td>0.04</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>284.0</td>
+      <td>344.0</td>
+      <td>0.05</td>
+      <td>270.0</td>
+      <td>0.04</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>375.0</td>
+      <td>435.0</td>
+      <td>0.10</td>
+      <td>45.0</td>
+      <td>0.04</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>465.0</td>
+      <td>525.0</td>
+      <td>0.80</td>
+      <td>0.0</td>
+      <td>0.04</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>556.0</td>
+      <td>616.0</td>
+      <td>0.60</td>
+      <td>135.0</td>
+      <td>0.04</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <p>This dataframe describes the stimulus presentation trials. The Start and End times are given in imaging frames (at 30 frames/sec). So you can see each trial has a duration of 2 seconds, with 1 second between trials, when mean luminance gray is presented. There are 8 directions (“Ori”) of gratings and 6 Contrasts, and there are blanksweeps interleaved when Contrast, Ori, SF, TF are all NaN.</p>
 <div class="cell docutils container">
@@ -768,6 +777,9 @@ title="Print to PDF"
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_single_cell_tuning_curves</span><span class="p">(</span><span class="n">savepath</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/02-contrast_analysis_19_0.png" src="../_images/02-contrast_analysis_19_0.png" />
 </div>
 </div>
 </section>
