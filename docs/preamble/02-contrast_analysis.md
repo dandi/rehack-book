@@ -22,7 +22,6 @@ import os
 import pynwb
 
 import warnings
-warnings.simplefilter("ignore")
 ```
 
 ```{code-cell} ipython3
@@ -52,14 +51,16 @@ with DandiAPIClient() as client:
 ```{code-cell} ipython3
 def load_sweep_table(s3_url):
     '''Creates a dataframe of the stimulus presentation table'''
-    with pynwb.NWBHDF5IO(s3_url, mode='r', load_namespaces=True, driver='ros3') as io:
-        nwbfile = io.read()
-        start_times = np.array(nwbfile.intervals['epochs']['start_time'].data)
-        stop_times = np.array(nwbfile.intervals['epochs']['stop_time'].data)
-        contrasts = np.array(nwbfile.intervals['epochs']['contrast'].data)
-        directions = np.array(nwbfile.intervals['epochs']['direction'].data)
-        SFs = np.array(nwbfile.intervals['epochs']['spatial_frequency'].data)
-        TFs = np.array(nwbfile.intervals['epochs']['temporal_frequency'].data)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        with pynwb.NWBHDF5IO(s3_url, mode='r', load_namespaces=True, driver='ros3') as io:
+            nwbfile = io.read()
+            start_times = np.array(nwbfile.intervals['epochs']['start_time'].data)
+            stop_times = np.array(nwbfile.intervals['epochs']['stop_time'].data)
+            contrasts = np.array(nwbfile.intervals['epochs']['contrast'].data)
+            directions = np.array(nwbfile.intervals['epochs']['direction'].data)
+            SFs = np.array(nwbfile.intervals['epochs']['spatial_frequency'].data)
+            TFs = np.array(nwbfile.intervals['epochs']['temporal_frequency'].data)
 
     df = pd.DataFrame(np.zeros((len(start_times),6)),columns=('Start','End','Contrast','Ori','SF','TF'))
     df['Start'] = start_times
@@ -96,21 +97,23 @@ def load_mean_sweep_events(s3_url, savepath):
     if os.path.isfile(os.path.join(savepath, str(session_ID)+'_mean_sweep_events.npy')):
         mse = np.load(os.path.join(savepath, str(session_ID)+'_mean_sweep_events.npy'))
     else:
-        with pynwb.NWBHDF5IO(s3_url, mode='r', load_namespaces=True, driver='ros3') as io:
-            nwbfile = io.read()
-            events = np.array(nwbfile.processing['brain_observatory_pipeline']['l0_events']['true_false_events'].data)
-            sweep_table = load_sweep_table(s3_url)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            with pynwb.NWBHDF5IO(s3_url, mode='r', load_namespaces=True, driver='ros3') as io:
+                nwbfile = io.read()
+                events = np.array(nwbfile.processing['brain_observatory_pipeline']['l0_events']['true_false_events'].data)
+                sweep_table = load_sweep_table(s3_url)
 
-            num_neurons = np.shape(events)[1]
-            num_sweeps = len(sweep_table)
+                num_neurons = np.shape(events)[1]
+                num_sweeps = len(sweep_table)
 
-            mse = np.zeros((num_sweeps,num_neurons))
-            for sweep in range(num_sweeps):
-                start_frame = int(sweep_table['Start'][sweep])
-                end_frame = int(sweep_table['End'][sweep])
-                mse[sweep] = np.mean(events[start_frame:end_frame,:],axis=0)
-            os.makedirs(savepath, exist_ok=True)
-            np.save(os.path.join(savepath, str(session_ID)+'_mean_sweep_events.npy'),mse)
+                mse = np.zeros((num_sweeps,num_neurons))
+                for sweep in range(num_sweeps):
+                    start_frame = int(sweep_table['Start'][sweep])
+                    end_frame = int(sweep_table['End'][sweep])
+                    mse[sweep] = np.mean(events[start_frame:end_frame,:],axis=0)
+                os.makedirs(savepath, exist_ok=True)
+                np.save(os.path.join(savepath, str(session_ID)+'_mean_sweep_events.npy'),mse)
     
     return mse
 ```
