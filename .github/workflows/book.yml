@@ -53,26 +53,17 @@ jobs:
         fi
         fc-cache -v
 
+    - uses: actions/checkout@v2
+
     - uses: conda-incubator/setup-miniconda@v2
       with:
-          python-version: 3.10
-          mamba-version: "*"
-          channels: conda-forge,defaults
-          channel-priority: true
-          activate-environment: anaconda-client-env
-          environment-file: etc/example-environment.yml
-    - shell: bash -l {0}
-      run: mamba install -c conda-forge h5py
-
-
-    - uses: actions/checkout@v2
-    - name: Install dependencies
+        auto-update-conda: true
+        python-version: 3.10
+    - name: install and build
+      shell: bash -l {0}
       run: |
+        conda install -c conda-forge h5py
         pip install -r requirements.txt
-
-    # Build the page
-    - name: Build the book
-      run: |
         jupyter-book build docs
 
     # Push the book's HTML to github-pages
