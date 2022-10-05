@@ -53,11 +53,15 @@ jobs:
         fi
         fc-cache -v
 
-    # Install dependencies
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v1
+    - uses: conda-incubator/setup-miniconda@v2
       with:
-        python-version: 3.10
+          python-version: 3.10
+          mamba-version: "*"
+          channels: conda-forge,defaults
+          channel-priority: true
+    - shell: bash -l {0}
+      run: mamba install -c conda-forge h5py
+
 
     - uses: actions/checkout@v2
     - name: Install dependencies
