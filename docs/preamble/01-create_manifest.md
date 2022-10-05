@@ -26,7 +26,6 @@ from tqdm import tqdm
 from joblib import Parallel, delayed
 
 import warnings
-warnings.simplefilter("ignore", category=UserWarning)
 ```
 
 ```{code-cell} ipython3
@@ -61,8 +60,10 @@ def to_struct(asset):
     
     path = md['path']
     s3_url = asset.get_content_url(regex='s3')
-    io = pynwb.NWBHDF5IO(s3_url, mode='r', load_namespaces=True, driver='ros3')
-    nwbfile = io.read()
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        io = pynwb.NWBHDF5IO(s3_url, mode='r', load_namespaces=True, driver='ros3')
+        nwbfile = io.read()
     location = nwbfile.imaging_planes['imaging_plane_1'].location
     manifest['area'] = location.split(',')[0].split((' '))[1]
     manifest['imaging_depth'] = location.split(',')[1].split((' '))[1]
