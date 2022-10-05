@@ -397,7 +397,6 @@ title="Print to PDF"
 <span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
 
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -444,8 +443,10 @@ title="Print to PDF"
     
     <span class="n">path</span> <span class="o">=</span> <span class="n">md</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span>
     <span class="n">s3_url</span> <span class="o">=</span> <span class="n">asset</span><span class="o">.</span><span class="n">get_content_url</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>
-    <span class="n">io</span> <span class="o">=</span> <span class="n">pynwb</span><span class="o">.</span><span class="n">NWBHDF5IO</span><span class="p">(</span><span class="n">s3_url</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">load_namespaces</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s1">&#39;ros3&#39;</span><span class="p">)</span>
-    <span class="n">nwbfile</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+        <span class="n">io</span> <span class="o">=</span> <span class="n">pynwb</span><span class="o">.</span><span class="n">NWBHDF5IO</span><span class="p">(</span><span class="n">s3_url</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">load_namespaces</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s1">&#39;ros3&#39;</span><span class="p">)</span>
+        <span class="n">nwbfile</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
     <span class="n">location</span> <span class="o">=</span> <span class="n">nwbfile</span><span class="o">.</span><span class="n">imaging_planes</span><span class="p">[</span><span class="s1">&#39;imaging_plane_1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">location</span>
     <span class="n">manifest</span><span class="p">[</span><span class="s1">&#39;area&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">location</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">((</span><span class="s1">&#39; &#39;</span><span class="p">))[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">manifest</span><span class="p">[</span><span class="s1">&#39;imaging_depth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">location</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">((</span><span class="s1">&#39; &#39;</span><span class="p">))[</span><span class="mi">1</span><span class="p">]</span>
@@ -459,151 +460,113 @@ title="Print to PDF"
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/100 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 10%|█         | 10/100 [00:00&lt;00:02, 37.68it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 10%|█         | 10/100 [00:00&lt;00:02, 36.91it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-common&#39; version 1.5.0 because version 1.5.1 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;core&#39; version 2.4.0 because version 2.5.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-experimental&#39; version 0.1.0 because version 0.2.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-common&#39; version 1.5.0 because version 1.5.1 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;core&#39; version 2.4.0 because version 2.5.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-experimental&#39; version 0.1.0 because version 0.2.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 10%|█         | 10/100 [00:19&lt;00:02, 36.91it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-common&#39; version 1.5.0 because version 1.5.1 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;core&#39; version 2.4.0 because version 2.5.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-experimental&#39; version 0.1.0 because version 0.2.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-common&#39; version 1.5.0 because version 1.5.1 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;core&#39; version 2.4.0 because version 2.5.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-experimental&#39; version 0.1.0 because version 0.2.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 20%|██        | 20/100 [00:53&lt;04:10,  3.13s/it]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-common&#39; version 1.5.0 because version 1.5.1 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;core&#39; version 2.4.0 because version 2.5.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-experimental&#39; version 0.1.0 because version 0.2.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 30%|███       | 30/100 [01:51&lt;05:04,  4.36s/it]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 10%|█         | 10/100 [00:19&lt;00:02, 37.68it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 40%|████      | 40/100 [02:40&lt;04:34,  4.58s/it]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 20%|██        | 20/100 [00:23&lt;01:50,  1.38s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████     | 50/100 [03:33&lt;04:02,  4.84s/it]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/test/lib/python3.10/site-packages/pynwb/base.py:193: UserWarning: TimeSeries &#39;MotionCorrection&#39;: Length of data does not match length of timestamps. Your data may be transposed. Time should be on the 0th dimension
-  warn(&quot;%s &#39;%s&#39;: Length of data does not match length of timestamps. Your data may be transposed. &quot;
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 60%|██████    | 60/100 [04:02&lt;02:47,  4.18s/it]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-common&#39; version 1.5.0 because version 1.5.1 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;core&#39; version 2.4.0 because version 2.5.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-experimental&#39; version 0.1.0 because version 0.2.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-common&#39; version 1.5.0 because version 1.5.1 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;core&#39; version 2.4.0 because version 2.5.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-experimental&#39; version 0.1.0 because version 0.2.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-common&#39; version 1.5.0 because version 1.5.1 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;core&#39; version 2.4.0 because version 2.5.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-experimental&#39; version 0.1.0 because version 0.2.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-common&#39; version 1.5.0 because version 1.5.1 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;core&#39; version 2.4.0 because version 2.5.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-experimental&#39; version 0.1.0 because version 0.2.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-common&#39; version 1.5.0 because version 1.5.1 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;core&#39; version 2.4.0 because version 2.5.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/spec/namespace.py:531: UserWarning: Ignoring cached namespace &#39;hdmf-experimental&#39; version 0.1.0 because version 0.2.0 is already loaded.
-  warn(&quot;Ignoring cached namespace &#39;%s&#39; version %s because version %s is already loaded.&quot;
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 30%|███       | 30/100 [00:47&lt;02:08,  1.84s/it]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/test/lib/python3.10/site-packages/pynwb/base.py:193: UserWarning: TimeSeries &#39;MotionCorrection&#39;: Length of data does not match length of timestamps. Your data may be transposed. Time should be on the 0th dimension
-  warn(&quot;%s &#39;%s&#39;: Length of data does not match length of timestamps. Your data may be transposed. &quot;
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/test/lib/python3.10/site-packages/pynwb/base.py:193: UserWarning: TimeSeries &#39;MotionCorrection&#39;: Length of data does not match length of timestamps. Your data may be transposed. Time should be on the 0th dimension
-  warn(&quot;%s &#39;%s&#39;: Length of data does not match length of timestamps. Your data may be transposed. &quot;
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">_RemoteTraceback</span><span class="g g-Whitespace">                          </span>Traceback (most recent call last)
+<span class="ne">_Remote</span>Traceback: 
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Traceback (most recent call last):</span>
+<span class="sd">  File &quot;/usr/share/miniconda/envs/test/lib/python3.10/site-packages/joblib/externals/loky/process_executor.py&quot;, line 428, in _process_worker</span>
+<span class="sd">    r = call_item()</span>
+<span class="sd">  File &quot;/usr/share/miniconda/envs/test/lib/python3.10/site-packages/joblib/externals/loky/process_executor.py&quot;, line 275, in __call__</span>
+<span class="sd">    return self.fn(*self.args, **self.kwargs)</span>
+<span class="sd">  File &quot;/usr/share/miniconda/envs/test/lib/python3.10/site-packages/joblib/_parallel_backends.py&quot;, line 620, in __call__</span>
+<span class="sd">    return self.func(*args, **kwargs)</span>
+<span class="sd">  File &quot;/usr/share/miniconda/envs/test/lib/python3.10/site-packages/joblib/parallel.py&quot;, line 288, in __call__</span>
+<span class="sd">    return [func(*args, **kwargs)</span>
+<span class="sd">  File &quot;/usr/share/miniconda/envs/test/lib/python3.10/site-packages/joblib/parallel.py&quot;, line 288, in &lt;listcomp&gt;</span>
+<span class="sd">    return [func(*args, **kwargs)</span>
+<span class="sd">  File &quot;/tmp/ipykernel_5651/922781437.py&quot;, line 21, in to_struct</span>
+<span class="sd">  File &quot;/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/utils.py&quot;, line 645, in func_call</span>
+<span class="sd">    return func(args[0], **pargs)</span>
+<span class="sd">  File &quot;/usr/share/miniconda/envs/test/lib/python3.10/site-packages/pynwb/__init__.py&quot;, line 246, in __init__</span>
+<span class="sd">    super().__init__(path, manager=manager, mode=mode, file=file_obj, comm=comm, driver=driver)</span>
+<span class="sd">  File &quot;/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/utils.py&quot;, line 645, in func_call</span>
+<span class="sd">    return func(args[0], **pargs)</span>
+<span class="sd">  File &quot;/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/backends/hdf5/h5tools.py&quot;, line 85, in __init__</span>
+<span class="sd">    super().__init__(manager, source=path)</span>
+<span class="sd">  File &quot;/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/utils.py&quot;, line 645, in func_call</span>
+<span class="sd">    return func(args[0], **pargs)</span>
+<span class="sd">  File &quot;/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/backends/io.py&quot;, line 23, in __init__</span>
+<span class="sd">    self.open()</span>
+<span class="sd">  File &quot;/usr/share/miniconda/envs/test/lib/python3.10/site-packages/hdmf/backends/hdf5/h5tools.py&quot;, line 729, in open</span>
+<span class="sd">    self.__file = File(self.source, open_flag, **kwargs)</span>
+<span class="sd">  File &quot;/usr/share/miniconda/envs/test/lib/python3.10/site-packages/h5py/_hl/files.py&quot;, line 507, in __init__</span>
+<span class="sd">    fid = make_fid(name, mode, userblock_size, fapl, fcpl, swmr=swmr)</span>
+<span class="sd">  File &quot;/usr/share/miniconda/envs/test/lib/python3.10/site-packages/h5py/_hl/files.py&quot;, line 220, in make_fid</span>
+<span class="sd">    fid = h5f.open(name, flags, fapl=fapl)</span>
+<span class="sd">  File &quot;h5py/_objects.pyx&quot;, line 54, in h5py._objects.with_phil.wrapper</span>
+<span class="sd">  File &quot;h5py/_objects.pyx&quot;, line 55, in h5py._objects.with_phil.wrapper</span>
+<span class="sd">  File &quot;h5py/h5f.pyx&quot;, line 106, in h5py.h5f.open</span>
+<span class="ne">OSError</span>: Unable to open file (curl cannot perform request)
+<span class="sd">&quot;&quot;&quot;</span>
 
- 40%|████      | 40/100 [01:05&lt;01:49,  1.82s/it]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/test/lib/python3.10/site-packages/pynwb/base.py:193: UserWarning: TimeSeries &#39;MotionCorrection&#39;: Length of data does not match length of timestamps. Your data may be transposed. Time should be on the 0th dimension
-  warn(&quot;%s &#39;%s&#39;: Length of data does not match length of timestamps. Your data may be transposed. &quot;
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/test/lib/python3.10/site-packages/pynwb/base.py:193: UserWarning: TimeSeries &#39;MotionCorrection&#39;: Length of data does not match length of timestamps. Your data may be transposed. Time should be on the 0th dimension
-  warn(&quot;%s &#39;%s&#39;: Length of data does not match length of timestamps. Your data may be transposed. &quot;
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/test/lib/python3.10/site-packages/pynwb/base.py:193: UserWarning: TimeSeries &#39;MotionCorrection&#39;: Length of data does not match length of timestamps. Your data may be transposed. Time should be on the 0th dimension
-  warn(&quot;%s &#39;%s&#39;: Length of data does not match length of timestamps. Your data may be transposed. &quot;
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/test/lib/python3.10/site-packages/pynwb/base.py:193: UserWarning: TimeSeries &#39;MotionCorrection&#39;: Length of data does not match length of timestamps. Your data may be transposed. Time should be on the 0th dimension
-  warn(&quot;%s &#39;%s&#39;: Length of data does not match length of timestamps. Your data may be transposed. &quot;
+<span class="n">The</span> <span class="n">above</span> <span class="n">exception</span> <span class="n">was</span> <span class="n">the</span> <span class="n">direct</span> <span class="n">cause</span> <span class="n">of</span> <span class="n">the</span> <span class="n">following</span> <span class="n">exception</span><span class="p">:</span>
 
- 50%|█████     | 50/100 [01:24&lt;01:32,  1.85s/it]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/test/lib/python3.10/site-packages/pynwb/base.py:193: UserWarning: TimeSeries &#39;MotionCorrection&#39;: Length of data does not match length of timestamps. Your data may be transposed. Time should be on the 0th dimension
-  warn(&quot;%s &#39;%s&#39;: Length of data does not match length of timestamps. Your data may be transposed. &quot;
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/test/lib/python3.10/site-packages/pynwb/base.py:193: UserWarning: TimeSeries &#39;MotionCorrection&#39;: Length of data does not match length of timestamps. Your data may be transposed. Time should be on the 0th dimension
-  warn(&quot;%s &#39;%s&#39;: Length of data does not match length of timestamps. Your data may be transposed. &quot;
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 60%|██████    | 60/100 [01:43&lt;01:14,  1.87s/it]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 70%|███████   | 70/100 [02:04&lt;00:58,  1.94s/it]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 80%|████████  | 80/100 [02:24&lt;00:39,  1.97s/it]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 90%|█████████ | 90/100 [02:44&lt;00:19,  1.98s/it]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 100/100 [03:03&lt;00:00,  1.95s/it]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 100/100 [03:03&lt;00:00,  1.83s/it]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/test/lib/python3.10/site-packages/pynwb/base.py:193: UserWarning: TimeSeries &#39;MotionCorrection&#39;: Length of data does not match length of timestamps. Your data may be transposed. Time should be on the 0th dimension
-  warn(&quot;%s &#39;%s&#39;: Length of data does not match length of timestamps. Your data may be transposed. &quot;
+<span class="ne">OSError</span><span class="g g-Whitespace">                                   </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">28</span>
+<span class="g g-Whitespace">     </span><span class="mi">25</span>     <span class="n">manifest</span><span class="p">[</span><span class="s1">&#39;imaging_depth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">location</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">((</span><span class="s1">&#39; &#39;</span><span class="p">))[</span><span class="mi">1</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">26</span>     <span class="k">return</span> <span class="n">manifest</span>
+<span class="nn">---&gt; 28 result = Parallel(n_jobs=10)(delayed(to_struct)(asset_list[i]) for i</span> in <span class="ni">tqdm(range</span><span class="nt">(number_assets)))</span>
+
+<span class="nn">File /usr/share/miniconda/envs/test/lib/python3.10/site-packages/joblib/parallel.py:1098,</span> in <span class="ni">Parallel.__call__</span><span class="nt">(self, iterable)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1095</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_iterating</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="g g-Whitespace">   </span><span class="mi">1097</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">retrieval_context</span><span class="p">():</span>
+<span class="ne">-&gt; </span><span class="mi">1098</span>     <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1099</span> <span class="c1"># Make sure that we get a last message telling us we are done</span>
+<span class="g g-Whitespace">   </span><span class="mi">1100</span> <span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start_time</span>
+
+<span class="nn">File /usr/share/miniconda/envs/test/lib/python3.10/site-packages/joblib/parallel.py:975,</span> in <span class="ni">Parallel.retrieve</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">973</span> <span class="k">try</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="p">,</span> <span class="s1">&#39;supports_timeout&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">975</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_output</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">))</span>
+<span class="g g-Whitespace">    </span><span class="mi">976</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">977</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_output</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+
+<span class="nn">File /usr/share/miniconda/envs/test/lib/python3.10/site-packages/joblib/_parallel_backends.py:567,</span> in <span class="ni">LokyBackend.wrap_future_result</span><span class="nt">(future, timeout)</span>
+<span class="g g-Whitespace">    </span><span class="mi">564</span> <span class="sd">&quot;&quot;&quot;Wrapper for Future.result to implement the same behaviour as</span>
+<span class="g g-Whitespace">    </span><span class="mi">565</span><span class="sd"> AsyncResults.get from multiprocessing.&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">566</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">567</span>     <span class="k">return</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">568</span> <span class="k">except</span> <span class="n">CfTimeoutError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">569</span>     <span class="k">raise</span> <span class="ne">TimeoutError</span> <span class="kn">from</span> <span class="nn">e</span>
+
+<span class="nn">File /usr/share/miniconda/envs/test/lib/python3.10/concurrent/futures/_base.py:446,</span> in <span class="ni">Future.result</span><span class="nt">(self, timeout)</span>
+<span class="g g-Whitespace">    </span><span class="mi">444</span>     <span class="k">raise</span> <span class="n">CancelledError</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">445</span> <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">FINISHED</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">446</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_result</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">447</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">448</span>     <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">()</span>
+
+<span class="nn">File /usr/share/miniconda/envs/test/lib/python3.10/concurrent/futures/_base.py:391,</span> in <span class="ni">Future.__get_result</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">389</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exception</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">390</span>     <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">391</span>         <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exception</span>
+<span class="g g-Whitespace">    </span><span class="mi">392</span>     <span class="k">finally</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">393</span>         <span class="c1"># Break a reference cycle with the exception in self._exception</span>
+<span class="g g-Whitespace">    </span><span class="mi">394</span>         <span class="bp">self</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="ne">OSError</span>: Unable to open file (curl cannot perform request)
 </pre></div>
 </div>
 </div>
@@ -621,116 +584,11 @@ title="Print to PDF"
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>session_id</th>
-      <th>specimen_id</th>
-      <th>genotype</th>
-      <th>sex</th>
-      <th>age</th>
-      <th>path</th>
-      <th>date</th>
-      <th>area</th>
-      <th>imaging_depth</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>698273664</td>
-      <td>673647168</td>
-      <td>Vip-IRES-Cre/wt;Ai148(TIT2L-GC6f-ICL-tTA2)/wt</td>
-      <td>Male</td>
-      <td>P128D</td>
-      <td>sub-673647168/sub-673647168_ses-698273664_beha...</td>
-      <td>2018-05-16T15:18:38.587000-07:00</td>
-      <td>VISp</td>
-      <td>175</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>792319003</td>
-      <td>760940732</td>
-      <td>Sst-IRES-Cre/wt;Ai148(TIT2L-GC6f-ICL-tTA2)/wt</td>
-      <td>Female</td>
-      <td>P136D</td>
-      <td>sub-760940732/sub-760940732_ses-792319003_beha...</td>
-      <td>2018-12-10T16:37:40.325000-08:00</td>
-      <td>VISp</td>
-      <td>275</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>791556785</td>
-      <td>760940732</td>
-      <td>Sst-IRES-Cre/wt;Ai148(TIT2L-GC6f-ICL-tTA2)/wt</td>
-      <td>Female</td>
-      <td>P136D</td>
-      <td>sub-760940732/sub-760940732_ses-791556785_beha...</td>
-      <td>2018-12-07T16:38:34.105000-08:00</td>
-      <td>VISp</td>
-      <td>275</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>791125374</td>
-      <td>760940732</td>
-      <td>Sst-IRES-Cre/wt;Ai148(TIT2L-GC6f-ICL-tTA2)/wt</td>
-      <td>Female</td>
-      <td>P136D</td>
-      <td>sub-760940732/sub-760940732_ses-791125374_beha...</td>
-      <td>2018-12-06T16:40:45.901000-08:00</td>
-      <td>VISal</td>
-      <td>275</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>793874958</td>
-      <td>760940732</td>
-      <td>Sst-IRES-Cre/wt;Ai148(TIT2L-GC6f-ICL-tTA2)/wt</td>
-      <td>Female</td>
-      <td>P136D</td>
-      <td>sub-760940732/sub-760940732_ses-793874958_beha...</td>
-      <td>2018-12-12T16:37:43.216000-08:00</td>
-      <td>VISl</td>
-      <td>275</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
 </div>
 <p>This dataframe has a row for each asset, describing some key metadata about the animal and recording location. We can explore the dataframe to identify assets by genotype, recording location (i.e. area), or other parameters, and find the path for each asset.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">manifest</span><span class="o">.</span><span class="n">genotype</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&#39;Vip-IRES-Cre/wt;Ai148(TIT2L-GC6f-ICL-tTA2)/wt&#39;,
-       &#39;Sst-IRES-Cre/wt;Ai148(TIT2L-GC6f-ICL-tTA2)/wt&#39;,
-       &#39;Cux2-CreERT2/wt;Camk2a-tTA/wt;Ai93(TITL-GCaMP6f)/wt&#39;,
-       &#39;Rbp4-Cre_KL100/wt;Camk2a-tTA/wt;Ai93(TITL-GCaMP6f)/wt&#39;,
-       &#39;Rorb-IRES2-Cre/wt;Camk2a-tTA/wt;Ai93(TITL-GCaMP6f)/wt&#39;,
-       &#39;Cux2-CreERT2/wt;Camk2a-CreERT2/wt;Ai93(TITL-GCaMP6f)/wt&#39;,
-       &#39;Ntsr1-Cre_GN220/wt;Ai148(TIT2L-GC6f-ICL-tTA2)/wt&#39;], dtype=object)
 </pre></div>
 </div>
 </div>
@@ -741,20 +599,10 @@ title="Print to PDF"
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&#39;VISp&#39;, &#39;VISal&#39;, &#39;VISl&#39;, &#39;VISpm&#39;, &#39;VISam&#39;, &#39;VISrl&#39;], dtype=object)
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">manifest</span><span class="p">[</span><span class="n">manifest</span><span class="o">.</span><span class="n">sex</span><span class="o">==</span><span class="s1">&#39;Female&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>64
 </pre></div>
 </div>
 </div>
@@ -765,117 +613,6 @@ title="Print to PDF"
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead tr th {
-        text-align: left;
-    }
-
-    .dataframe thead tr:last-of-type th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr>
-      <th></th>
-      <th colspan="6" halign="left">path</th>
-    </tr>
-    <tr>
-      <th>area</th>
-      <th>VISal</th>
-      <th>VISam</th>
-      <th>VISl</th>
-      <th>VISp</th>
-      <th>VISpm</th>
-      <th>VISrl</th>
-    </tr>
-    <tr>
-      <th>genotype</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Cux2-CreERT2/wt;Camk2a-CreERT2/wt;Ai93(TITL-GCaMP6f)/wt</th>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>Cux2-CreERT2/wt;Camk2a-tTA/wt;Ai93(TITL-GCaMP6f)/wt</th>
-      <td>5</td>
-      <td>6</td>
-      <td>6</td>
-      <td>8</td>
-      <td>5</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>Ntsr1-Cre_GN220/wt;Ai148(TIT2L-GC6f-ICL-tTA2)/wt</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>6</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>Rbp4-Cre_KL100/wt;Camk2a-tTA/wt;Ai93(TITL-GCaMP6f)/wt</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>4</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>Rorb-IRES2-Cre/wt;Camk2a-tTA/wt;Ai93(TITL-GCaMP6f)/wt</th>
-      <td>4</td>
-      <td>0</td>
-      <td>4</td>
-      <td>4</td>
-      <td>4</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>Sst-IRES-Cre/wt;Ai148(TIT2L-GC6f-ICL-tTA2)/wt</th>
-      <td>9</td>
-      <td>0</td>
-      <td>8</td>
-      <td>8</td>
-      <td>8</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>Vip-IRES-Cre/wt;Ai148(TIT2L-GC6f-ICL-tTA2)/wt</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>6</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
 </div>
 </section>
 </section>
