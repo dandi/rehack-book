@@ -1,0 +1,8 @@
+format: jb-book
+root: welcome
+parts:
+- caption: preamble
+  chapters:
+  - file: preamble/step0
+  - file: preamble/01-create_manifest.md
+  - file: preamble/02-contrast_analysis.md
