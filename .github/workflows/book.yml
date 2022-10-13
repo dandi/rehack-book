@@ -11,7 +11,7 @@ jobs:
   deploy-book:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       with:
         path: /var/lib/apt
         key: apt-cache-v2
@@ -37,7 +37,7 @@ jobs:
                              texlive-latex-extra \
                              unzip
 
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       with:
         path: ~/.fonts
         key: fonts-v4
@@ -53,7 +53,7 @@ jobs:
         fi
         fc-cache -v
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - uses: conda-incubator/setup-miniconda@v2
       with:
@@ -68,7 +68,7 @@ jobs:
 
     # Push the book's HTML to github-pages
     - name: GitHub Pages action
-      uses: peaceiris/actions-gh-pages@v3.6.1
+      uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./docs/_build/html
