@@ -6,11 +6,6 @@ copyright: "2022"
 # Sphinx customizations
 sphinx:
   config:
-    nb_custom_formats:
-      .Rmd:
-        - jupytext.reads
-        - fmt: Rmd
-    bibtex_reference_style: author_year
     # html_extra_path: ["assets"]
     mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
