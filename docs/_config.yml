@@ -3,10 +3,6 @@ title: "NeurodataReHack book"
 author: "The tutorial authors"
 copyright: "2022"
 
-# Bibliography settings
-bibtex_bibfiles:
-  - references.bib
-
 # Sphinx customizations
 sphinx:
   config:
@@ -22,8 +18,10 @@ sphinx:
 execute:
   timeout: 3000
   exclude_patterns:
-    - 0*ipynb
+    - .github/*
   execute_notebooks: auto
+
+only_build_toc_files: true
 
 # HTML-specific settings
 html:
